@@ -1,0 +1,110 @@
+/* Copyright (c) 2025 by Chris Bolson (https://codepen.io/cbolson/pen/ByBPjGr) */
+* {
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100svh;
+	display: grid;
+	place-content: center;
+	background: black;
+	font-family: system-ui;
+	margin: 0;
+}
+.gallery {
+	--gallery-bg-color: rgba(255 255 255 / 0.075);
+	--gallery-border-color: rgba(255 255 255 / 0.25);
+	--gallery-padding: 0.5rem;
+	--gallery-width: 240px;
+	--gallery-height: 400px;
+	--gallery-perspective: 800px;
+	--gallery-divider-height: 4px;
+
+	position: relative;
+	background-color: var(--gallery-bg-color);
+	border: 1px solid var(--gallery-border-color);
+	padding: var(--gallery-padding);
+}
+@media (600px < width) {
+	.gallery {
+		--gallery-width: 300px;
+		--gallery-height: 500px;
+	}
+}
+.flip-gallery {
+	position: relative;
+	width: var(--gallery-width);
+	height: var(--gallery-height);
+	text-align: center;
+	perspective: var(--gallery-perspective);
+}
+
+/* image title/author with transition */
+.flip-gallery::before {
+	content: attr(data-title);
+	color: rgba(255 255 255 / 0.75);
+	font-size: 0.75rem;
+	left: calc(var(--gallery-padding) * -1);
+	position: absolute;
+	top: calc(100% + calc(var(--gallery-padding) * 2));
+	line-height: 2;
+	opacity: var(--title-opacity, 0);
+	translate: 0 var(--title-y, 0);
+	transition: opacity 500ms ease-in-out, translate 500ms ease-in-out;
+}
+/* divider line half way down */
+.flip-gallery::after {
+	content: "";
+	position: absolute;
+	background-color: black;
+	width: 100%;
+	height: var(--gallery-divider-height);
+	top: 50%;
+	left: 0;
+	translate: 0 -50%;
+}
+/* image placed in separate elements for flip effect */
+.flip-gallery > * {
+	position: absolute;
+	width: 100%;
+	height: 50%;
+	overflow: hidden;
+	background-repeat: no-repeat;
+	background-size: var(--gallery-width) var(--gallery-height);
+}
+.top,
+.overlay-top {
+	top: 0;
+	transform-origin: bottom;
+	background-position: top;
+}
+.bottom,
+.overlay-bottom {
+	bottom: 0;
+	transform-origin: top;
+	background-position: bottom;
+}
+/* gallery controls */
+.gallery-nav {
+	position: absolute;
+	top: calc(100% + var(--gallery-padding));
+	right: 0;
+	display: flex;
+	gap: 0.5rem;
+}
+.gallery-nav > button {
+	border: none;
+	outline: none;
+	padding: 0;
+	background: rgba(12 74 110 / 0);
+	color: white;
+	opacity: 0.75;
+	font-size: 1rem;
+	transition: scale 150ms ease-in-out, opacity 150ms ease-in-out;
+}
+
+.gallery-nav > button:focus-visible,
+.gallery-nav > button:hover {
+	scale: 1.5;
+	opacity: 1;
+}
